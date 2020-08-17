@@ -7,32 +7,44 @@ import { VimPreviewColorType } from "../../types";
 import "./index.scss";
 
 /* prettier-ignore */
-const template = `
-<pre class="Background">
+const createTemplate = uuid => `
+<pre class="Background-${uuid}">
   <code>
-    <span class="jsStorageClass">const</span><span class="jsVariableDef"> randomHexColorCode </span><span class="jsOperator">=</span><span class="jsArrowFunction"> () </span><span class="jsArrowFunction">=&gt;</span><span class="jsFuncBraces"> {</span>
-      <span class="jsStorageClass">let</span><span class="jsVariableDef"> n </span><span class="jsOperator">=</span><span class="jsParens"> (</span><span class="jsGlobalObjects">Math</span><span class="jsDot">.</span><span class="jsFuncCall">random</span><span class="jsParens">() </span><span class="jsOperator">* </span><span class="jsNumber">0xfffff</span><span class="jsOperator"> * </span><span class="jsNumber">1000000</span><span class="jsParens">)</span><span class="jsDot">.</span><span class="jsFuncCall">toString</span><span class="jsParens">(</span><span class="jsNumber">16</span><span class="jsParens">)</span><span class="jsNoise">;</span>
-      <span class="jsReturn">return </span><span class="jsString">"#" </span><span class="jsOperator">+</span><span class="jsFuncBlock"> n</span><span class="jsDot">.</span><span class="jsFuncCall">slice</span><span class="jsParens">(</span><span class="jsNumber">0</span><span class="jsNoise">, </span><span class="jsNumber">6</span><span class="jsParens">)</span><span class="jsNoise">;</span>
+    <span class="jsStorageClass-${uuid}">const</span><span class="jsVariableDef-${uuid}"> randomHexColorCode </span><span class="jsOperator-${uuid}">=</span><span class="jsArrowFunction-${uuid}"> () </span><span class="jsArrowFunction-${uuid}">=&gt;</span><span class="jsFuncBraces-${uuid}"> {</span>
+      <span class="jsStorageClass-${uuid}">let</span><span class="jsVariableDef-${uuid}"> n </span><span class="jsOperator-${uuid}">=</span><span class="jsParens-${uuid}"> (</span><span class="jsGlobalObjects-${uuid}">Math</span><span class="jsDot-${uuid}">.</span><span class="jsFuncCall-${uuid}">random</span><span class="jsParens-${uuid}">() </span><span class="jsOperator-${uuid}">* </span><span class="jsNumber-${uuid}">0xfffff</span><span class="jsOperator-${uuid}"> * </span><span class="jsNumber-${uuid}">1000000</span><span class="jsParens-${uuid}">)</span><span class="jsDot-${uuid}">.</span><span class="jsFuncCall-${uuid}">toString</span><span class="jsParens-${uuid}">(</span><span class="jsNumber-${uuid}">16</span><span class="jsParens-${uuid}">)</span><span class="jsNoise-${uuid}">;</span>
+      <span class="jsReturn-${uuid}">return </span><span class="jsString-${uuid}">"#" </span><span class="jsOperator-${uuid}">+</span><span class="jsFuncBlock-${uuid}"> n</span><span class="jsDot-${uuid}">.</span><span class="jsFuncCall-${uuid}">slice</span><span class="jsParens-${uuid}">(</span><span class="jsNumber-${uuid}">0</span><span class="jsNoise-${uuid}">, </span><span class="jsNumber-${uuid}">6</span><span class="jsParens-${uuid}">)</span><span class="jsNoise-${uuid}">;</span>
     <span class="jsFuncBraces">}</span><span class="jsNoise">;</span>
 
-    <span class="jsGlobalObjects">console</span><span class="jsDot">.</span><span class="jsFuncCall">log</span><span class="jsParens">(</span><span class="jsFuncCall">randomHexColorCode</span><span class="jsParens">())</span><span class="jsNoise">;</span>
+    <span class="jsGlobalObjects-${uuid}">console</span><span class="jsDot-${uuid}">.</span><span class="jsFuncCall-${uuid}">log</span><span class="jsParens-${uuid}">(</span><span class="jsFuncCall-${uuid}">randomHexColorCode</span><span class="jsParens-${uuid}">())</span><span class="jsNoise-${uuid}">;</span>
   </code>
 </pre>
 `
 
+function uuidv4() {
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+    var r = (Math.random() * 16) | 0,
+      v = c === "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+
 const VimPreview = ({ colors, className }) => {
   if (typeof document === "undefined") return null;
+
+  const uuid = uuidv4();
 
   const style = document.createElement("style");
   style.type = "text/css";
   style.innerHTML = colors.reduce(
-    (styleValue, color) =>
-      `${styleValue}.${color.key}{${
-        color.key === "Background" ? "background" : "color"
-      }:${color.value}}`,
+    (styleValue, { group, color }) =>
+      `${styleValue}.${group}-${uuid}{${
+        group === "Background" ? "background" : "color"
+      }:${color}}`,
     "",
   );
   document.getElementsByTagName("head")[0].appendChild(style);
+
+  const template = createTemplate(uuid);
 
   return (
     <div
@@ -44,7 +56,7 @@ const VimPreview = ({ colors, className }) => {
 
 VimPreview.propTypes = {
   colors: VimPreviewColorType,
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default VimPreview;

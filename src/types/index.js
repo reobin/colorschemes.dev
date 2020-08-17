@@ -11,8 +11,8 @@ export const RepositoryOwnerType = PropTypes.shape({
 }).isRequired;
 
 export const VimPreviewColorType = PropTypes.shape({
-  key: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
+  group: PropTypes.string.isRequired,
+  color: PropTypes.string.isRequired,
 });
 
 export const RepositoryType = PropTypes.shape({

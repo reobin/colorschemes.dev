@@ -143,8 +143,8 @@ export const query = graphql`
       lastCommitAt: last_commit_at
       createdAt: github_created_at
       vimColors: vim_colors {
-        key
-        value
+        group
+        color
       }
       owner {
         name
