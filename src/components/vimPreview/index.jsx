@@ -13,7 +13,7 @@ const createTemplate = uuid => `
     <span class="jsStorageClass-${uuid}">const</span><span class="jsVariableDef-${uuid}"> randomHexColorCode </span><span class="jsOperator-${uuid}">=</span><span class="jsArrowFunction-${uuid}"> () </span><span class="jsArrowFunction-${uuid}">=&gt;</span><span class="jsFuncBraces-${uuid}"> {</span>
       <span class="jsStorageClass-${uuid}">let</span><span class="jsVariableDef-${uuid}"> n </span><span class="jsOperator-${uuid}">=</span><span class="jsParens-${uuid}"> (</span><span class="jsGlobalObjects-${uuid}">Math</span><span class="jsDot-${uuid}">.</span><span class="jsFuncCall-${uuid}">random</span><span class="jsParens-${uuid}">() </span><span class="jsOperator-${uuid}">* </span><span class="jsNumber-${uuid}">0xfffff</span><span class="jsOperator-${uuid}"> * </span><span class="jsNumber-${uuid}">1000000</span><span class="jsParens-${uuid}">)</span><span class="jsDot-${uuid}">.</span><span class="jsFuncCall-${uuid}">toString</span><span class="jsParens-${uuid}">(</span><span class="jsNumber-${uuid}">16</span><span class="jsParens-${uuid}">)</span><span class="jsNoise-${uuid}">;</span>
       <span class="jsReturn-${uuid}">return </span><span class="jsString-${uuid}">"#" </span><span class="jsOperator-${uuid}">+</span><span class="jsFuncBlock-${uuid}"> n</span><span class="jsDot-${uuid}">.</span><span class="jsFuncCall-${uuid}">slice</span><span class="jsParens-${uuid}">(</span><span class="jsNumber-${uuid}">0</span><span class="jsNoise-${uuid}">, </span><span class="jsNumber-${uuid}">6</span><span class="jsParens-${uuid}">)</span><span class="jsNoise-${uuid}">;</span>
-    <span class="jsFuncBraces">}</span><span class="jsNoise">;</span>
+    <span class="jsFuncBraces-${uuid}">}</span><span class="jsNoise-${uuid}">;</span>
 
     <span class="jsGlobalObjects-${uuid}">console</span><span class="jsDot-${uuid}">.</span><span class="jsFuncCall-${uuid}">log</span><span class="jsParens-${uuid}">(</span><span class="jsFuncCall-${uuid}">randomHexColorCode</span><span class="jsParens-${uuid}">())</span><span class="jsNoise-${uuid}">;</span>
   </code>
@@ -55,7 +55,7 @@ const VimPreview = ({ colors, className }) => {
 };
 
 VimPreview.propTypes = {
-  colors: VimPreviewColorType,
+  colors: PropTypes.arrayOf(VimPreviewColorType),
   className: PropTypes.string,
 };
 

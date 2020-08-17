@@ -25,5 +25,8 @@ export const RepositoryType = PropTypes.shape({
   images: PropTypes.arrayOf(GatsbyImageType.isRequired),
   lastCommitAt: PropTypes.string.isRequired,
   createdAt: PropTypes.string.isRequired,
-  vimColors: PropTypes.arrayOf(VimPreviewColorType),
+  vimColors: PropTypes.shape({
+    light: PropTypes.arrayOf(VimPreviewColorType),
+    dark: PropTypes.arrayOf(VimPreviewColorType),
+  }),
 }).isRequired;

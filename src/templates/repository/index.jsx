@@ -90,8 +90,17 @@ const RepositoryPage = ({ data, location }) => {
           <RepositoryTitle ownerName={ownerName} name={name} tag="h1" />
           <p>{description}</p>
         </header>
-        {!!vimColors && (
-          <VimPreview className="repository__vim-preview" colors={vimColors} />
+        {!!vimColors?.light && (
+          <VimPreview
+            className="repository__vim-preview"
+            colors={vimColors.light}
+          />
+        )}
+        {!!vimColors?.dark && (
+          <VimPreview
+            className="repository__vim-preview"
+            colors={vimColors.dark}
+          />
         )}
         <section>
           {!!featuredImage && (
@@ -143,8 +152,14 @@ export const query = graphql`
       lastCommitAt: last_commit_at
       createdAt: github_created_at
       vimColors: vim_colors {
-        group
-        color
+        light {
+          group
+          color
+        }
+        dark {
+          group
+          color
+        }
       }
       owner {
         name
