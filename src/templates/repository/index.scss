@@ -35,8 +35,20 @@
   }
 }
 
+.repository__vim-previews {
+  display: grid;
+  grid-template-columns: calc(50% - 1rem) calc(50% - 1rem);
+  grid-column-gap: 2rem;
+  margin: 0 0 2rem;
+}
+
 .repository__vim-preview {
-  margin-bottom: 2rem;
+  flex: 1;
+  margin: -1rem;
+  padding: 1rem;
+  &:focus {
+    @include focus-border;
+  }
 }
 
 .repository__nav-link-icon {

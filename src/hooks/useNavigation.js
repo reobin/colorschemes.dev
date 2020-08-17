@@ -239,7 +239,7 @@ const getNextTabIndexOfPreviousSection = (
 // focus on a tab index if the element exists
 const focus = (focusables, index) => {
   const nextElement = focusables[index];
-  nextElement && nextElement.focus();
+  if (nextElement) nextElement.focus();
 };
 
 // get all focusable elements of the current tab index's section
