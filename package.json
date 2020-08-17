@@ -27,6 +27,7 @@
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-helmet": "^6.0.0",
+    "typeface-jetbrains-mono": "^2.0.0",
     "typeface-source-sans-pro": "^1.1.5"
   },
   "devDependencies": {

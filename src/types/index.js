@@ -10,6 +10,11 @@ export const RepositoryOwnerType = PropTypes.shape({
   name: PropTypes.string.isRequired,
 }).isRequired;
 
+export const VimPreviewColorType = PropTypes.shape({
+  key: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+});
+
 export const RepositoryType = PropTypes.shape({
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
@@ -20,4 +25,5 @@ export const RepositoryType = PropTypes.shape({
   images: PropTypes.arrayOf(GatsbyImageType.isRequired),
   lastCommitAt: PropTypes.string.isRequired,
   createdAt: PropTypes.string.isRequired,
+  vimColors: PropTypes.arrayOf(VimPreviewColorType),
 }).isRequired;

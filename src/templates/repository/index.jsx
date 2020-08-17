@@ -19,6 +19,7 @@ import Mosaic from "../../components/mosaic";
 import RepositoryTitle from "../../components/repositoryTitle";
 import SEO from "../../components/seo";
 import ZoomableImage from "../../components/zoomableImage";
+import VimPreview from "../../components/vimPreview";
 
 import "./index.scss";
 
@@ -32,6 +33,7 @@ const RepositoryPage = ({ data, location }) => {
     featuredImage,
     description,
     images,
+    vimColors,
   } = getRepositoryInfos(data.repository);
 
   const {
@@ -88,6 +90,9 @@ const RepositoryPage = ({ data, location }) => {
           <RepositoryTitle ownerName={ownerName} name={name} tag="h1" />
           <p>{description}</p>
         </header>
+        {!!vimColors && (
+          <VimPreview className="repository__vim-preview" colors={vimColors} />
+        )}
         <section>
           {!!featuredImage && (
             <ZoomableImage
@@ -137,6 +142,10 @@ export const query = graphql`
       stargazersCount: stargazers_count
       lastCommitAt: last_commit_at
       createdAt: github_created_at
+      vimColors: vim_colors {
+        key
+        value
+      }
       owner {
         name
       }
