@@ -43,7 +43,7 @@ module.exports = {
           process.env.GATSBY_DATABASE_CONNECTION_STRING ||
           "mongodb://localhost:27017",
         dbName: process.env.GATSBY_DATABASE_NAME || "colorschemes",
-        collection: ["repositories"],
+        collection: [ { name: "repositories", type: "repositories" }],
       },
     },
     {
