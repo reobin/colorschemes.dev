@@ -13,13 +13,13 @@ const imagePromises = [];
 export const createSchemaCustomization = ({ actions }) => {
   const { createTypes } = actions;
   createTypes(`
-    type mongodbColorschemesRepositories implements Node {
+    type repositories implements Node {
       processed_featured_image: File @link
       processed_images: [File]
     }
   `);
   Logger.info(
-    "Adding processed image fields to mongodbColorschemesRepositories node",
+    "Adding processed image fields to repositories node",
   );
 };
 
@@ -31,7 +31,7 @@ export const onCreateNode = ({
   createNodeId,
 }) => {
   if (
-    node.internal.type === "mongodbColorschemesRepositories" &&
+    node.internal.type === "repositories" &&
     !!node.valid &&
     node.image_urls &&
     node.image_urls.length > 0
@@ -123,7 +123,7 @@ const createRepositoriesPages = (repositories, createPage) => {
 
 const repositoriesQuery = `
   {
-    allMongodbColorschemesRepositories(filter: {valid: { eq: true }, image_urls: { ne: "" }}) {
+    allRepositories(filter: {valid: { eq: true }, image_urls: { ne: "" }}) {
       nodes {
         name
         owner {
@@ -139,7 +139,7 @@ export const createPages = async ({ graphql, actions }) => {
 
   const {
     data: {
-      allMongodbColorschemesRepositories: { nodes: repositories },
+      allRepositories: { nodes: repositories },
     },
   } = await graphql(repositoriesQuery);
 

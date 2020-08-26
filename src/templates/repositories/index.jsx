@@ -92,7 +92,7 @@ export const query = graphql`
   query(
     $skip: Int!
     $limit: Int!
-    $sortField: [mongodbColorschemesRepositoriesFieldsEnum]!
+    $sortField: [repositoriesFieldsEnum]!
     $sortOrder: [SortOrderEnum]!
   ) {
     site {
@@ -100,7 +100,7 @@ export const query = graphql`
         platform
       }
     }
-    repositoriesData: allMongodbColorschemesRepositories(
+    repositoriesData: allRepositories(
       filter: { valid: { eq: true }, image_urls: { ne: "" } }
       sort: { fields: $sortField, order: $sortOrder }
       limit: $limit

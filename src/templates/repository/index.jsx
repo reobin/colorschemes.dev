@@ -125,7 +125,7 @@ export const query = graphql`
         platform
       }
     }
-    repository: mongodbColorschemesRepositories(
+    repository: repositories(
       owner: { name: { eq: $ownerName } }
       name: { eq: $name }
     ) {
