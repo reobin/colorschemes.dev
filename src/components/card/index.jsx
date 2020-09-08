@@ -4,83 +4,91 @@ import Img from "gatsby-image";
 import PropTypes from "prop-types";
 import classnames from "classnames";
 
-import { LAYOUTS, SECTIONS } from "../../constants";
+import { RepositoryType } from "src/types";
 
-import { URLify } from "../../utils/string";
-import { getRepositoryInfos } from "../../utils/repository";
+import { LAYOUTS, SECTIONS } from "src/constants";
 
-import RepositoryTitle from "../repositoryTitle";
-import { Star } from "../icons";
+import { URLify } from "src/utils/string";
+import { format } from "src/utils/date";
+import { getFirstProcessedFluidImage } from "src/utils/repository";
+
+import { Star, TrendingUp } from "src/components/icons";
+
+import RepositoryTitle from "src/components/repositoryTitle";
 
 import "./index.scss";
 
 const Card = ({ repository, linkId, linkTabIndex, linkState, className }) => {
   const {
-    ownerName,
+    owner: { name: ownerName },
     name,
     description,
     featuredImage,
+    images,
     stargazersCount,
+    weekStargazersCount,
     lastCommitAt,
     createdAt,
-  } = getRepositoryInfos(repository);
+  } = repository;
+
+  const fluidImage = getFirstProcessedFluidImage(featuredImage, images);
 
   return (
     <li className={classnames("card", className)}>
-      <div className="card__image">
-        {!!featuredImage && (
-          <Img
-            fluid={featuredImage.childImageSharp.fluid}
-            alt={`${ownerName} ${name}`}
-            imgStyle={{ objectFit: "contain" }}
-          />
-        )}
-      </div>
-      <div className="card__header">
-        <h3 className="card__title">
-          <Link
-            to={`/${URLify(`${ownerName}/${name}`)}`}
-            state={linkState}
-            id={linkId}
-            tabIndex={linkTabIndex}
-            data-section={SECTIONS.REPOSITORIES}
-            data-layout={LAYOUTS.GRID}
-          >
-            <RepositoryTitle ownerName={ownerName} name={name} />
-          </Link>
-        </h3>
-        <div className="card__stargazers">
-          <Star className="card__stargazers-icon" />
-          <span className="card__stargazers-count">{stargazersCount}</span>
+      <Link
+        to={`/${URLify(`${ownerName}/${name}`)}`}
+        state={linkState}
+        id={linkId}
+        tabIndex={linkTabIndex}
+        data-section={SECTIONS.REPOSITORIES}
+        data-layout={LAYOUTS.GRID}
+        aria-label={`${name}, by ${ownerName}`}
+      >
+        <div className="card__image">
+          {!!fluidImage && (
+            <Img
+              fluid={fluidImage}
+              alt={`${ownerName} ${name}`}
+              imgStyle={{ objectFit: "contain" }}
+            />
+          )}
         </div>
-      </div>
-      <p className="card__infos">{description}</p>
-      <p className="card__infos">
-        Created <strong>{createdAt}</strong>
-      </p>
-      <p className="card__infos">
-        Last commit <strong>{lastCommitAt}</strong>
-      </p>
+        <div className="card__header">
+          <h3 className="card__title">
+            <RepositoryTitle ownerName={ownerName} name={name} />
+          </h3>
+          <div className="card__meta">
+            <div className="card__stargazers">
+              <Star className="card__icon" />
+              <span className="card__stargazers-count">
+                <strong>{stargazersCount}</strong>
+              </span>
+            </div>
+            {!!weekStargazersCount && (
+              <div className="card__trending-stargazers-count">
+                <TrendingUp className="card__icon" />
+                <span>
+                  <strong>{weekStargazersCount}</strong>/week
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <p className="card__infos">{description}</p>
+        <p className="card__infos">
+          Created <strong>{format(createdAt)}</strong>
+        </p>
+        <p className="card__infos">
+          Last commit <strong>{format(lastCommitAt)}</strong>
+        </p>
+      </Link>
     </li>
   );
 };
 
 Card.propTypes = {
-  repository: PropTypes.shape({
-    owner: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-    }).isRequired,
-    name: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    featuredImage: PropTypes.shape({
-      childImageSharp: PropTypes.shape({
-        fluid: PropTypes.shape({}).isRequired,
-      }).isRequired,
-    }),
-    stargazersCount: PropTypes.number.isRequired,
-    lastCommitAt: PropTypes.string.isRequired,
-    createdAt: PropTypes.string.isRequired,
-  }).isRequired,
+  repository: RepositoryType.isRequired,
   linkState: PropTypes.object,
   className: PropTypes.string,
 };

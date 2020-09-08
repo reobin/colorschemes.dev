@@ -3,15 +3,13 @@ import classnames from "classnames";
 import { graphql, Link } from "gatsby";
 import PropTypes from "prop-types";
 
-import { RepositoryType } from "../../types";
+import { RepositoryType } from "src/types";
 
-import { LAYOUTS, SECTIONS } from "../../constants";
+import { LAYOUTS, SECTIONS } from "src/constants";
 
-import { useNavigation } from "../../hooks/useNavigation";
+import { useNavigation } from "src/hooks/useNavigation";
 
-import { getRepositoryInfos } from "../../utils/repository";
-
-import { Arrow, GitHub } from "../../components/icons";
+import { Arrow, GitHub } from "src/components/icons";
 
 import ExternalLink from "../../components/externalLink";
 import Layout from "../../components/layout";
@@ -27,14 +25,14 @@ const RepositoryPage = ({ data, location }) => {
   const fromPath = location?.state?.fromPath;
 
   const {
-    ownerName,
+    owner: { name: ownerName },
     name,
     githubUrl,
     featuredImage,
     description,
     images,
     vimColors,
-  } = getRepositoryInfos(data.repository);
+  } = data.repository;
 
   const {
     siteMetadata: { platform },

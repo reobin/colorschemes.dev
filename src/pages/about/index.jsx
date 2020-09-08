@@ -2,13 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import { graphql } from "gatsby";
 
-import { SECTIONS, LAYOUTS } from "../../constants";
+import { SECTIONS, LAYOUTS } from "src/constants";
 
-import { useNavigation } from "../../hooks/useNavigation";
+import { useNavigation } from "src/hooks/useNavigation";
 
-import ExternalLink from "../../components/externalLink";
-import Layout from "../../components/layout";
-import SEO from "../../components/seo";
+import ExternalLink from "src/components/externalLink";
+import Layout from "src/components/layout";
+import SEO from "src/components/seo";
 
 import "./index.scss";
 
@@ -35,33 +35,17 @@ const AboutPage = ({
           </a>
         </h1>
         <p>
-          <strong>
-            {platform}
-            {title}{" "}
-          </strong>{" "}
-          is a <strong>fun</strong> and <strong>fast</strong> gallery for{" "}
-          {platform} color scheme repositories on GitHub.
+          vimcolorschemes is a small constellation of projects working on the
+          common goal of building the <strong>ultimate resource</strong> for vim
+          users to find the <strong>perfect color scheme</strong> for their
+          development environment.
         </p>
         <p>
-          It solves an old problem of mine, which is to find the perfect{" "}
-          {platform} color scheme. <strong>Syntax color</strong> in a coding
-          environment is <strong>a big part</strong> of what makes it{" "}
-          <strong>yours and yours only</strong>.
-        </p>
-        <p>
-          GitHub holds an impressive amount of {platform} color schemes. It is
-          not easy to navigate through them, though. Checking out a couple to
-          find a nice one can take a while.
-        </p>
-        <p>
-          This is where{" "}
-          <strong>
-            {platform}
-            {title}
-          </strong>{" "}
-          comes in. It is <strong>minimal</strong>,{" "}
-          <strong>focused on content</strong>, and{" "}
-          <strong>it feels awesome</strong> to navigate through.
+          The <strong>focus</strong> here is always on the{" "}
+          <strong>content</strong>. The <strong>simple design</strong> of the
+          website make the color schemes the focal point of every page.{" "}
+          <strong>Speed</strong> and <strong>accessibility</strong> are also
+          part of the core mission of <strong>vimcolorschemes</strong>.
         </p>
         <h2 className="subtitle" id="key-features">
           <a
@@ -77,11 +61,11 @@ const AboutPage = ({
         </h2>
         <ul>
           <li>
-            <strong>Daily updated</strong> list of thousands of {platform} color
+            <strong>Daily updated</strong> list of hundreds of {platform} color
             scheme repositories
           </li>
           <li>
-            <strong>Awesome vim key (or arrows) bindings</strong> to navigate
+            <strong>Awesome vim (or arrows) key bindings</strong> to navigate
             quickly through the whole site
           </li>
         </ul>

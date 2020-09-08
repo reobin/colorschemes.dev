@@ -1,26 +1,32 @@
 export const ACTIONS = {
-  DEFAULT: {
-    label: "Most popular",
+  TRENDING: {
+    label: "Trending",
     route: "/",
+    field: "week_stargazers_count",
+    order: "DESC",
   },
-  SORT_BY_STARS_ASC: {
-    label: "Least popular",
-    route: "/stars/asc/",
+  MOST_POPULAR: {
+    label: "Most popular",
+    route: "/most-popular",
+    field: "stargazers_count",
+    order: "DESC",
   },
-  SORT_BY_UPDATED_DESC: {
+  RECENTLY_UPDATED: {
     label: "Most recently updated",
-    route: "/updated/desc/",
+    route: "/recently-updated",
+    field: "last_commit_at",
+    order: "DESC",
   },
-  SORT_BY_UPDATED_ASC: {
-    label: "Least recently updated",
-    route: "/updated/asc/",
-  },
-  SORT_BY_CREATED_ASC: {
-    label: "Oldest",
-    route: "/created/asc/",
-  },
-  SORT_BY_CREATED_DESC: {
+  NEWEST: {
     label: "Newest",
-    route: "/created/desc/",
+    route: "/newest",
+    field: "github_created_at",
+    order: "DESC",
+  },
+  OLDEST: {
+    label: "Oldest",
+    route: "/oldest",
+    field: "github_created_at",
+    order: "ASC",
   },
 };

@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "gatsby";
 
-import { LAYOUTS, SECTIONS } from "../../constants";
+import { LAYOUTS, SECTIONS } from "src/constants";
 
 import "./index.scss";
 
@@ -19,6 +19,7 @@ const Actions = ({ actions, activeAction }) => (
           data-section={SECTIONS.ACTIONS}
           data-layout={LAYOUTS.LIST}
           to={action.route}
+          aria-label={`${action.label} vim color schemes`}
         >
           {action.label}
         </Link>
