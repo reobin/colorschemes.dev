@@ -184,18 +184,15 @@ export const query = graphql`
         owner {
           name
         }
-        featuredImage: processed_featured_image {
-          childImageSharp {
-            fluid {
-              ...GatsbyImageSharpFluid
-            }
+        colors {
+          name
+          dark {
+            group
+            color
           }
-        }
-        images: processed_images {
-          childImageSharp {
-            fluid {
-              ...GatsbyImageSharpFluid
-            }
+          light {
+            group
+            color
           }
         }
       }

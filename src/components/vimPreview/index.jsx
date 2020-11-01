@@ -27,11 +27,17 @@ function uuidv4() {
 const VimPreview = ({ colors, className, ...args }) => {
   if (typeof document === "undefined") return null;
 
+  let value = !!colors?.length ? colors[0] : null;
+  if (!value) return null;
+
+  if (value.dark) value = value.dark;
+  else value = value.light;
+
   const uuid = uuidv4();
 
   const style = document.createElement("style");
   style.type = "text/css";
-  style.innerHTML = colors.reduce(
+  style.innerHTML = value.reduce(
     (styleValue, { group, color }) =>
       `${styleValue}.${group}-${uuid}{${
         group === "Background" ? "background" : "color"
@@ -42,9 +48,12 @@ const VimPreview = ({ colors, className, ...args }) => {
 
   const template = createTemplate(uuid).trim();
 
+  console.log(style);
+  console.log(template);
+
   return (
     <a
-      className={classnames(className)}
+      className={classnames(className, `Normal-${uuid}`)}
       dangerouslySetInnerHTML={{ __html: template }}
       href=""
       {...args}

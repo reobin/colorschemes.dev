@@ -12,6 +12,7 @@ import { URLify } from "src/utils/string";
 import { getFirstProcessedImage } from "src/utils/repository";
 
 import RepositoryMeta from "src/components/repositoryMeta";
+import VimPreview from "src/components/vimPreview";
 
 import "./index.scss";
 
@@ -19,11 +20,8 @@ const Card = ({ repository, linkState, onLinkClick, className }) => {
   const {
     owner: { name: ownerName },
     name,
-    featuredImage,
-    images,
+    colors,
   } = repository;
-
-  const fluidImage = getFirstProcessedImage(featuredImage, images);
 
   const imageStyle = {
     objectFit: "contain",
@@ -45,21 +43,7 @@ const Card = ({ repository, linkState, onLinkClick, className }) => {
         }}
       >
         <div className="card__image">
-          {!!fluidImage &&
-            (fluidImage.base64 ? (
-              <Img
-                fluid={fluidImage}
-                alt={`${ownerName} ${name}`}
-                imgStyle={imageStyle}
-              />
-            ) : (
-              <img
-                src={fluidImage.src}
-                alt={`${ownerName} ${name}`}
-                style={imageStyle}
-                loading="lazy"
-              />
-            ))}
+          <VimPreview colors={colors} />
         </div>
         <RepositoryMeta repository={repository} tag="h3" />
       </Link>

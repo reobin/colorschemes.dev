@@ -90,22 +90,22 @@ const RepositoryPage = ({ data, location }) => {
           <RepositoryMeta repository={data.repository} tag="h1" />
         </header>
         <div className="repository__vim-previews">
-          {!!vimColors?.light && (
-            <VimPreview
-              className="repository__vim-preview"
-              colors={vimColors.light}
-              data-section={SECTIONS.REPOSITORY_PREVIEW}
-              data-layout={LAYOUTS.LIST}
-            />
-          )}
-          {!!vimColors?.dark && (
-            <VimPreview
-              className="repository__vim-preview"
-              colors={vimColors.dark}
-              data-section={SECTIONS.REPOSITORY_PREVIEW}
-              data-layout={LAYOUTS.LIST}
-            />
-          )}
+          {/* {!!colors?.light && ( */}
+          {/*   <VimPreview */}
+          {/*     className="repository__vim-preview" */}
+          {/*     colors={colors.light} */}
+          {/*     data-section={SECTIONS.REPOSITORY_PREVIEW} */}
+          {/*     data-layout={LAYOUTS.LIST} */}
+          {/*   /> */}
+          {/* )} */}
+          {/* {!!colors?.dark && ( */}
+          {/*   <VimPreview */}
+          {/*     className="repository__vim-preview" */}
+          {/*     colors={colors.dark} */}
+          {/*     data-section={SECTIONS.REPOSITORY_PREVIEW} */}
+          {/*     data-layout={LAYOUTS.LIST} */}
+          {/*   /> */}
+          {/* )} */}
         </div>
         <section>
           {!!featuredImage && (
@@ -147,7 +147,6 @@ export const query = graphql`
       weekStargazersCount: week_stargazers_count
       lastCommitAt: last_commit_at
       createdAt: github_created_at
-      colors
       owner {
         name
       }
