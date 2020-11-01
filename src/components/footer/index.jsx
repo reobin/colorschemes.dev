@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Link } from "gatsby";
 
 import { SECTIONS, LAYOUTS } from "src/constants";
@@ -10,12 +11,17 @@ import SiteTitle from "src/components/siteTitle";
 
 import "./index.scss";
 
-const Footer = () => (
+const Footer = ({ onLogoClick }) => (
   <footer className="footer">
-    <SiteTitle section={SECTIONS.FOOTER_NAV} vertical />
+    <SiteTitle
+      section={SECTIONS.FOOTER_NAV}
+      isFooter
+      onLogoClick={onLogoClick}
+    />
     <nav className="footer__nav">
       <Link
         to="/about"
+        data-testid="footer-link-about"
         data-section={SECTIONS.FOOTER_NAV}
         data-layout={LAYOUTS.LIST}
         data-priority={1}
@@ -23,7 +29,7 @@ const Footer = () => (
         About
       </Link>
       <ExternalLink
-        to="https://github.com/reobin/vimcolorschemes"
+        to="https://github.com/vimcolorschemes/vimcolorschemes"
         data-section={SECTIONS.FOOTER_NAV}
         data-layout={LAYOUTS.LIST}
         className="accent"
@@ -43,5 +49,9 @@ const Footer = () => (
     </nav>
   </footer>
 );
+
+Footer.propTypes = {
+  onLogoClick: PropTypes.func,
+};
 
 export default Footer;

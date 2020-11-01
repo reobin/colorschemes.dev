@@ -11,15 +11,17 @@ import { useNavigation } from "src/hooks/useNavigation";
 
 import { Arrow, GitHub } from "src/components/icons";
 
-import ExternalLink from "../../components/externalLink";
-import Layout from "../../components/layout";
-import Mosaic from "../../components/mosaic";
-import RepositoryTitle from "../../components/repositoryTitle";
-import SEO from "../../components/seo";
-import ZoomableImage from "../../components/zoomableImage";
+import ExternalLink from "src/components/externalLink";
+import Layout from "src/components/layout";
+import Mosaic from "src/components/mosaic";
+import RepositoryMeta from "src/components/repositoryMeta";
+import SEO from "src/components/seo";
+import ZoomableImage from "src/components/zoomableImage";
 import VimPreview from "../../components/vimPreview";
 
 import "./index.scss";
+
+import { format } from "src/utils/date";
 
 const RepositoryPage = ({ data, location }) => {
   const fromPath = location?.state?.fromPath;
@@ -27,16 +29,13 @@ const RepositoryPage = ({ data, location }) => {
   const {
     owner: { name: ownerName },
     name,
+    stargazersCount,
+    createdAt,
     githubUrl,
     featuredImage,
-    description,
     images,
-    vimColors,
+    colors,
   } = data.repository;
-
-  const {
-    siteMetadata: { platform },
-  } = data.site;
 
   useNavigation(SECTIONS.REPOSITORY_PREVIEW);
 
@@ -77,16 +76,18 @@ const RepositoryPage = ({ data, location }) => {
   return (
     <Layout>
       <SEO
-        title={`${name} ${platform} color scheme, by ${ownerName}`}
-        description={description}
+        title={`${name} vim color scheme, by ${ownerName}`}
+        description={`The ${name} vim color scheme was created ${format(
+          createdAt,
+        )} by ${ownerName}, and has over ${stargazersCount} stars on Github. Check it out on vimcolorschemes.com`}
         imageUrl={featuredImage?.publicURL}
         path={`/${ownerName}/${name}`}
       />
       <article className="repository">
         <header className="repository__hero">
           <Nav />
-          <RepositoryTitle ownerName={ownerName} name={name} tag="h1" />
-          <p>{description}</p>
+
+          <RepositoryMeta repository={data.repository} tag="h1" />
         </header>
         <div className="repository__vim-previews">
           {!!vimColors?.light && (
@@ -127,11 +128,6 @@ const RepositoryPage = ({ data, location }) => {
 RepositoryPage.propTypes = {
   data: PropTypes.shape({
     repository: RepositoryType,
-    site: PropTypes.shape({
-      siteMetadata: PropTypes.shape({
-        platform: PropTypes.string.isRequired,
-      }).isRequired,
-    }).isRequired,
   }),
   location: PropTypes.shape({
     fromPath: PropTypes.string,
@@ -140,11 +136,6 @@ RepositoryPage.propTypes = {
 
 export const query = graphql`
   query($ownerName: String!, $name: String!) {
-    site {
-      siteMetadata {
-        platform
-      }
-    }
     repository: mongodbColorschemesRepositories(
       owner: { name: { eq: $ownerName } }
       name: { eq: $name }
@@ -153,18 +144,10 @@ export const query = graphql`
       description
       githubUrl: github_url
       stargazersCount: stargazers_count
+      weekStargazersCount: week_stargazers_count
       lastCommitAt: last_commit_at
       createdAt: github_created_at
-      vimColors: vim_colors {
-        light {
-          group
-          color
-        }
-        dark {
-          group
-          color
-        }
-      }
+      colors
       owner {
         name
       }

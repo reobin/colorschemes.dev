@@ -68,3 +68,12 @@ yarn-error.log
 .pnp.js
 # Yarn Integrity file
 .yarn-integrity
+
+# MongoDB Data in Develop Environment
+mongo
+
+# cypress files
+cypress/videos
+cypress/plugins
+cypress/screenshots
+cypress/fixtures

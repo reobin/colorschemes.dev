@@ -1,15 +1,18 @@
 const siteUrl = process.env.GATSBY_SITE_URL || "http://localhost:8000";
 
+require("dotenv").config({
+  path: ".env",
+});
+
 module.exports = {
   siteMetadata: {
-    title: process.env.GATSBY_SITE_TITLE || "colorschemes",
-    platform: process.env.GATSBY_SITE_PLATFORM || "vim",
+    title: "vimcolorschemes",
     socialImageUrl: process.env.GATSBY_SOCIAL_IMAGE_URL || "",
     arrows: "hjkl",
     siteUrl,
-    description:
-      process.env.GATSBY_SITE_DESCRIPTION ||
-      "Find the best vim color schemes around",
+    description: "Find the best vim color schemes around",
+    metaDescription:
+      "vimcolorschemes.com is the ultimate resource for vim users to find the perfect color scheme for their development environment. Come for the hundreds of vim color schemes, stay for the awesome hjkl spatial navigation.",
     author: "@reobin",
   },
   plugins: [
@@ -19,6 +22,7 @@ module.exports = {
     "gatsby-plugin-sharp",
     "gatsby-plugin-sitemap",
     "gatsby-transformer-sharp",
+    "gatsby-plugin-preact",
     {
       resolve: "gatsby-plugin-robots-txt",
       options: {
@@ -28,9 +32,9 @@ module.exports = {
           },
           production: {
             policy: [
-              process.env.GATSBY_DISABLE_ROBOTS
-                ? { userAgent: "*", disallow: ["/"] }
-                : { userAgent: "*", allow: ["/"] },
+              process.env.GATSBY_ENABLE_ROBOTS
+                ? { userAgent: "*", allow: ["/"] }
+                : { userAgent: "*", disallow: ["/"] },
             ],
           },
         },
@@ -56,12 +60,8 @@ module.exports = {
     {
       resolve: "gatsby-plugin-manifest",
       options: {
-        name: `${process.env.GATSBY_SITE_PLATFORM || "vim"}${
-          process.env.GATSBY_SITE_TITLE || "colorschemes"
-        }`,
-        short_name: `${process.env.GATSBY_SITE_PLATFORM || "vim"}${
-          process.env.GATSBY_SITE_TITLE || "colorschemes"
-        }`,
+        name: "vimcolorschemes",
+        short_name: "vimcolorschemes",
         start_url: "/",
         background_color: "#fff",
         theme_color: "#333",

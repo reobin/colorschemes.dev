@@ -1,26 +1,71 @@
-import { useEffect } from "react";
+import { useEffect, useCallback, useRef } from "react";
 
 import { LAYOUTS, KEYS, SECTIONS, NON_NAVIGATION_KEYS } from "src/constants";
+import {
+  isInViewport,
+  isAtPageTop,
+  isBrowserActive,
+} from "src/utils/navigation";
 
+/**
+ * Hook that listens for navigation keys and navigates by focusing to configured elements
+ *
+ * All focusable elements must have the data-section attribute.
+ *
+ * @example
+ * const [resetNavigation] = useNavigation();
+ *
+ * @param {string} defaultSection Section to focus on when nothing was focused before
+ *
+ * @returns {array} Utility functions to control navigation
+ */
 export const useNavigation = defaultSection => {
+  const isBrowser = isBrowserActive();
+
+  const eventListener = useRef({ callback: null });
+
+  const resetNavigation = useCallback(() => {
+    if (!isBrowser) return;
+
+    window.removeEventListener("keydown", eventListener.current.callback);
+
+    const focusables = document.querySelectorAll("*[data-section]");
+
+    const callback = event =>
+      Object.values(KEYS).includes(event.key) &&
+      handleKeyPress(event, focusables, defaultSection);
+
+    window.addEventListener("keydown", callback);
+
+    eventListener.current.callback = callback;
+  }, [isBrowser, defaultSection]);
+
+  const disableNavigation = useCallback(() => {
+    if (!isBrowser) return;
+
+    window.removeEventListener("keydown", eventListener.current.callback);
+    eventListener.current.callback = null;
+  }, [isBrowser]);
+
   useEffect(() => {
-    if (typeof window !== "undefined" && typeof document !== "undefined") {
-      const focusables = document.querySelectorAll("*[data-section]");
+    if (!isBrowser) return;
 
-      const eventListener = event =>
-        Object.values(KEYS).includes(event.key) &&
-        handleKeyPress(event, focusables, defaultSection);
+    resetNavigation();
+    return () => disableNavigation();
+  }, [isBrowser, resetNavigation, disableNavigation]);
 
-      window.addEventListener("keydown", eventListener);
-      return () => window.removeEventListener("keydown", eventListener);
-    }
-  }, [defaultSection]);
+  return [resetNavigation];
 };
 
 const handleKeyPress = (event, focusables, defaultSection) => {
-  const { key } = event;
+  const { key, metaKey } = event;
 
-  if (NON_NAVIGATION_KEYS.includes(key)) return;
+  const { activeElement } = document;
+
+  const isTextInput =
+    activeElement.tagName === "INPUT" && activeElement.type === "text";
+
+  if (NON_NAVIGATION_KEYS.includes(key) || isTextInput) return;
 
   if (
     [
@@ -28,12 +73,11 @@ const handleKeyPress = (event, focusables, defaultSection) => {
       KEYS.ARROW_RIGHT,
       KEYS.ARROW_DOWN,
       KEYS.ARROW_LEFT,
-    ].includes(key)
+    ].includes(key) &&
+    !metaKey
   ) {
     event.preventDefault();
   }
-
-  const { activeElement } = document;
 
   const currentTabIndex = Array.prototype.indexOf.call(
     focusables,
@@ -43,15 +87,23 @@ const handleKeyPress = (event, focusables, defaultSection) => {
   const { section, layout } = activeElement.dataset;
 
   let nextTabIndex;
-  if (key === KEYS.TOP) {
+
+  if (metaKey) {
+    if ([KEYS.UP, KEYS.ARROW_UP].includes(key)) {
+      nextTabIndex = 0;
+    } else if ([KEYS.DOWN, KEYS.ARROW_DOWN].includes(key)) {
+      nextTabIndex = focusables.length - 1;
+    }
+  } else if (key === KEYS.TOP) {
     nextTabIndex = getFirstTabIndexOfSection(focusables, SECTIONS.REPOSITORIES);
   } else if (key === KEYS.BOTTOM) {
     nextTabIndex = getLastTabIndexOfSection(focusables, SECTIONS.REPOSITORIES);
   } else {
     if (currentTabIndex === -1) {
-      nextTabIndex = defaultSection
-        ? getFirstTabIndexOfSection(focusables, defaultSection)
-        : 0;
+      nextTabIndex = getFirstVisibleTabIndexOfSection(
+        focusables,
+        defaultSection,
+      );
     } else {
       switch (layout) {
         case LAYOUTS.BLOCK:
@@ -236,22 +288,6 @@ const getNextTabIndexOfPreviousSection = (
   return null;
 };
 
-// return true if the given element is visible in the viewport
-// source: https://gomakethings.com/how-to-test-if-an-element-is-in-the-viewport-with-vanilla-javascript/
-const isInViewport = element => {
-  const bounding = element.getBoundingClientRect();
-  const clientHeight =
-    window?.innerHeight || document?.documentElement.clientHeight;
-  const clientWidth =
-    window?.innerWidth || document?.documentElement.clientWidth;
-  return (
-    bounding.top >= 0 &&
-    bounding.left >= 0 &&
-    bounding.bottom <= clientHeight &&
-    bounding.right <= clientWidth
-  );
-};
-
 // focus on a tab index if the element exists
 const focus = (focusables, index) => {
   const nextElement = focusables[index];
@@ -303,6 +339,32 @@ const getSectionTabIndexes = (focusables, section) =>
       focusable.dataset.section === section ? [...indexes, index] : indexes,
     [],
   );
+
+// get the first visible tab index of a specified section, and defaults to
+// simply first visible tab index of any sections
+const getFirstVisibleTabIndexOfSection = (focusables, section) => {
+  const getFirstVisibleTabIndex = () =>
+    Array.prototype.findIndex.call(focusables, focusable =>
+      isInViewport(focusable),
+    );
+
+  if (!section) return getFirstVisibleTabIndex();
+
+  const elements = prioritize(
+    getSectionTabIndexes(focusables, section),
+    focusables,
+  );
+
+  if (isAtPageTop()) return elements[0];
+
+  const firstVisibleIndex = elements.find(index =>
+    isInViewport(focusables[index]),
+  );
+
+  return firstVisibleIndex == null
+    ? getFirstVisibleTabIndex()
+    : firstVisibleIndex;
+};
 
 // get the first tab index of a given section
 // if an element within the section has priority, it will be returned first
